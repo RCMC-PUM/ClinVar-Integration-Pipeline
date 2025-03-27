@@ -22,7 +22,7 @@ params.rename_chrom_notation = true // if on convert '1' to 'chr1' in annotation
 
 // Assistant
 params.clinical_data = '' // Path to the sample sheet providin clinical description for each sample defined in sample_sheet
-params.assistant = true
+params.assistant = false
 
 
 workflow {

@@ -11,18 +11,33 @@ This Nextflow pipeline automates the process of filtering, annotating, and inter
 
 
 ## Parameters
-| Parameter | Description |
-|-----------|-------------|
-| `--sample_sheet` | Path to the sample sheet |
-| `--output_dir` | Directory for storing results |
-| `--clinical_data` | Path to the clinical comma-separated data sheet (optional, enables AI interpretation) |
-| `--clinical_significance` | Comma-separated filters for variant pathogenicity (default: `Pathogenic,Likely_pathogenic,...`) |
-| `--clinical_review_status` | Comma-separated filters for clinical review status (default: `_multiple_submitters,...`) |
-| `--genome_assembly` | Genome version (`hg19` or `hg38`), used to download the newest ClinVar annotations if `--annotations_file` is not provided |
-| `--annotations_file` | Path to user-provided annotations VCF file (optional, but required if --genome_assembly is not provided) |
-| `--rename_chrom_notation` | Convert chromosome notation if `true` (default: true) |
-| `--variant_limit` | Maximum number of variants to process (default: 100) |
+```
+Typical pipeline command:
 
+  nextflow run main.nf --sample_sheet sample_sheet.csv --output_dir test/ --clinical_data clinical.csv --assistant=true
+
+--help                     [boolean, string] Show the help message for all top level parameters. When a parameter is given to `--help`, the full help message of that parameter will be printed. 
+--helpFull                 [boolean]         Show the help message for all non-hidden parameters. 
+--showHidden               [boolean]         Show all hidden parameters in the help message. This needs to be used in combination with `--help` or `--helpFull`. 
+
+I/O
+  --sample_sheet           [string] 
+  --output_dir             [string] 
+
+Filters
+  --clinical_review_status [string]  
+  --clinical_significance  [string]  
+  --variant_limit          [integer] [default: 100] 
+
+Annotations
+  --genome_assembly        [string]   (accepted: hg19, hg38) 
+  --annotations_file       [string]  
+  --rename_chrom_notation  [boolean] [default: true] 
+
+LLM assistant
+  --clinical_data          [string]  
+  --assistant              [boolean] [default: false] 
+```
 
 ## Exemplary sample sheet CSV-file
 File shoud contain **three** comma-separated columns including: `Sample_Name`: unique sample identifier, `Path`: comprising aboslute path to vcf file, as well as `Caller` type, either `small_variant`, `cnv`, `repeats`, `sv` or `ploidy`.
@@ -40,7 +55,7 @@ File shoud contain **three** comma-separated columns including: `Sample_Name`: u
 File shoud contain **two** comma-separated columns `Sample_Name`, `Clinical_Description`.
 
 | Sample_Name | Clinical_Description |
-|-------------|------|
+|-------------|-------------------------------------------------------------------|
 | BB-0043 | Abnormal facial shape; Abnormality of the ear; Behavioral abnormality |
 
 
@@ -77,11 +92,15 @@ To display help page:
 nextflow run main.nf -- help
 ```
 
-To start exemplary analysis:
+To start exemplary analysis `LLM-assitant turned OFF`:
 ```sh
-nextflow run main.nf --sample_sheet samples.csv --output_dir results --genome_assembly hg38 --clinical_data clinical.csv --annotations_file annotations.vcf.gz
+nextflow run main.nf --sample_sheet samples.csv --output_dir results --genome_assembly hg38
 ```
 
+To start exemplary analysis `LLM-assitant turned OFF`:
+```sh
+nextflow run main.nf --sample_sheet samples.csv --output_dir results --genome_assembly hg38 --clinical_data clinical.csv --assistant=true
+```
 
 ## Output structure
 ```

@@ -92,7 +92,7 @@
         },
         "assistant": {
           "type": "boolean",
-          "default": true
+          "default": false
         }
       }
     }
