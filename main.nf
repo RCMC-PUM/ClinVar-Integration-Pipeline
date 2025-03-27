@@ -54,10 +54,12 @@ workflow {
     VALIDATE_SAMPLE_SHEET(sample_sheet)
 
     // If clinical data provided start validation process
-    if (params.clinical_data){
+    if (params.clinical_data && params.assistant){
         clinical_data = file(params.clinical_data, checkIfExists:true)
+
         VALIDATE_CLINICAL_DATA(clinical_data)
         VALIDATE_INTEROPERABILITY(sample_sheet, clinical_data)
+
         if (!secrets.OPENAI_KEY) { 
             assert false : "--clinical_data parameters requires predefined secret: OPENAI_KEY." 
             }
