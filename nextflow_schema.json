@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com///nextflow_schema.json",
+  "title": " pipeline parameters",
+  "description": "",
+  "type": "object",
+  "$defs": {
+    "i_o": {
+      "title": "I/O",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "sample_sheet": {
+          "type": "string"
+        },
+        "output_dir": {
+          "type": "string"
+        }
+      },
+      "required": ["sample_sheet", "output_dir"]
+    },
+    "filters": {
+      "title": "Filters",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "clinical_review_status": {
+          "type": "string"
+        },
+        "clinical_significance": {
+          "type": "string"
+        },
+        "variant_limit": {
+          "type": "integer",
+          "default": 100
+        }
+      },
+      "required": [
+        "clinical_review_status",
+        "clinical_significance",
+        "variant_limit"
+      ]
+    },
+    "annotations": {
+      "title": "Annotations",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "genome_assembly": {
+          "type": "string",
+          "enum": ["hg19", "hg38"]
+        },
+        "annotations_file": {
+          "type": "string"
+        },
+        "rename_chrom_notation": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "configuration": {
+      "title": "Configuration",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "glossary": {
+          "type": "string",
+          "default": "templates/glossary.json",
+          "hidden": true
+        },
+        "template": {
+          "type": "string",
+          "default": "templates/report.html",
+          "hidden": true
+        }
+      },
+      "required": ["glossary", "template"]
+    },
+    "llm_assistant": {
+      "title": "LLM assistant",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "clinical_data": {
+          "type": "string"
+        },
+        "assistant": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/i_o"
+    },
+    {
+      "$ref": "#/$defs/filters"
+    },
+    {
+      "$ref": "#/$defs/annotations"
+    },
+    {
+      "$ref": "#/$defs/configuration"
+    },
+    {
+      "$ref": "#/$defs/llm_assistant"
+    }
+  ]
+}
