@@ -21,22 +21,21 @@ Typical pipeline command:
 --showHidden               [boolean]         Show all hidden parameters in the help message. This needs to be used in combination with `--help` or `--helpFull`. 
 
 I/O
-  --sample_sheet           [string] 
-  --output_dir             [string] 
+  --sample_sheet           [string] Input CSV file comprising: Sample_Name, Path and Caller fields.
+  --output_dir             [string] Output directory.
 
 Filters
-  --clinical_review_status [string]  
-  --clinical_significance  [string]  
-  --variant_limit          [integer] [default: 100] 
+  --clinical_review_status [string] Pathogenicity (comma-separated) level(s) [default: Pathogenic,Likely_pathogenic,Pathogenic/Likely_pathogenic,Pathogenic|risk_factor].
+  --clinical_significance  [string] Clinical significance (comma-separated) level(s) [default: _multiple_submitters,criteria_provided,reviewed_by_expert_panel].
 
 Annotations
-  --genome_assembly        [string]   (accepted: hg19, hg38) 
-  --annotations_file       [string]  
-  --rename_chrom_notation  [boolean] [default: true] 
+  --genome_assembly        [string]  Genome assembly used to fetch appropriate ClinVar annotations  (accepted: hg19, hg38) [default: hg38].
+  --annotations_file       [string]  Path to annotation file [OPTIONAL].
+  --rename_chrom_notation  [boolean] If true rename chromosome notation from 1 -- > chr1 [default: true].
 
 LLM assistant
-  --clinical_data          [string]  
-  --assistant              [boolean] [default: false] 
+  --clinical_data          [string]  Path to comma-separated CSV file comprising: Sample_Name and Clinical_Description fields. 
+  --assistant              [boolean] If true use LLM assistant.
 ```
 
 ## Exemplary sample sheet CSV-file

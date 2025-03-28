@@ -12,10 +12,12 @@
       "default": "",
       "properties": {
         "sample_sheet": {
-          "type": "string"
+          "type": "string",
+          "description": "Input CSV file comprising: Sample_Name, Path and Caller fields."
         },
         "output_dir": {
-          "type": "string"
+          "type": "string",
+          "description": "Output directory."
         }
       },
       "required": ["sample_sheet", "output_dir"]
@@ -27,21 +29,17 @@
       "default": "",
       "properties": {
         "clinical_review_status": {
-          "type": "string"
+          "type": "string",
+          "description": "Pathogenicity (comma-separated) level(s).",
+          "default": "Pathogenic,Likely_pathogenic,Pathogenic/Likely_pathogenic,Pathogenic|risk_factor"
         },
         "clinical_significance": {
-          "type": "string"
-        },
-        "variant_limit": {
-          "type": "integer",
-          "default": 100
+          "type": "string",
+          "description": "Clinical significance (comma-separated) level(s).",
+          "default": "_multiple_submitters,criteria_provided,reviewed_by_expert_panel"
         }
       },
-      "required": [
-        "clinical_review_status",
-        "clinical_significance",
-        "variant_limit"
-      ]
+      "required": ["clinical_review_status", "clinical_significance"]
     },
     "annotations": {
       "title": "Annotations",
@@ -51,13 +49,17 @@
       "properties": {
         "genome_assembly": {
           "type": "string",
-          "enum": ["hg19", "hg38"]
+          "enum": ["hg19", "hg38"],
+          "description": "Genome assembly used to fetch appropriate ClinVar annotations.",
+          "default": "hg38"
         },
         "annotations_file": {
-          "type": "string"
+          "type": "string",
+          "description": "Path to annotation file [OPTIONAL]."
         },
         "rename_chrom_notation": {
           "type": "boolean",
+          "description": "If true rename chromosome notation from 1 -- > chr1.",
           "default": true
         }
       }
@@ -77,9 +79,14 @@
           "type": "string",
           "default": "templates/report.html",
           "hidden": true
+        },
+        "variant_limit": {
+          "type": "integer",
+          "default": 100,
+          "hidden": true
         }
       },
-      "required": ["glossary", "template"]
+      "required": ["glossary", "template", "variant_limit"]
     },
     "llm_assistant": {
       "title": "LLM assistant",
@@ -88,11 +95,17 @@
       "default": "",
       "properties": {
         "clinical_data": {
-          "type": "string"
+          "type": "string",
+          "description": "Path to comma-separated CSV file comprising: Sample_Name and Clinical_Description fields."
         },
         "assistant": {
           "type": "boolean",
-          "default": false
+          "description": "If true use LLM assistant."
+        },
+        "model_config": {
+          "type": "string",
+          "default": "model_config.json",
+          "hidden": true
         }
       }
     }
