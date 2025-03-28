@@ -9,7 +9,11 @@ process VALIDATE_SAMPLE_SHEET {
 
     ss = pd.read_csv("$file")
     expected_cols = ["Sample_Name","Path","Caller"]
+    supported_callers = ['sv', 'ploidy', 'cnv', 'small_variant', 'repeats']
+    
+    callers = ss["Caller"].unique()
 
+    assert set(callers) == set(supported_callers), f"Supported callers types are: {supported_callers}!"
     assert set(expected_cols) == set(ss.columns), f"Sample sheet should contain three columns: {expected_cols}!"
     """
 }
