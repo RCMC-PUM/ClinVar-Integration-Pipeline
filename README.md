@@ -96,7 +96,8 @@ To start exemplary analysis `LLM-assitant turned OFF`:
 nextflow run main.nf --sample_sheet samples.csv --output_dir results --genome_assembly hg38
 ```
 
-To start exemplary analysis `LLM-assitant turned OFF`:
+To start exemplary analysis `LLM-assitant turned ON`:
+**IMPORTANTLY**, the clinical_data and sample_sheet files should contain the same set of samples. If clinical data are not available or not provided for a specific sample, leave the `Clinical_Description` field empty.
 ```sh
 nextflow run main.nf --sample_sheet samples.csv --output_dir results --genome_assembly hg38 --clinical_data clinical.csv --assistant=true
 ```
