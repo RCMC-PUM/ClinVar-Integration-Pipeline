@@ -1,4 +1,4 @@
-all: black isort pylint
+all: dos2unix black isort pylint
 
 black:
 	@echo "Code formatting"
@@ -11,3 +11,7 @@ isort:
 pylint:
 	@echo "Code QC"
 	poetry run pylint bin/*.py
+
+dos2unix:
+	@echo "Reformatting"
+	dos2unix bin/*.py
