@@ -1,5 +1,5 @@
 process INTERPRET {
-    maxForks 1
+    maxForks 5
 
     // previously defined OpenAI API KEY
     // for more info see https://openai.com/index/openai-api/
@@ -9,22 +9,22 @@ process INTERPRET {
     publishDir "$params.output_dir/samples/$sample", mode: 'copy', overwrite: true, pattern: '*.json'
     tuple val(sample), file(variants)
     file clincial_data 
+    file model_config 
 
     output:
-    file "interpretation.json"
+    tuple val(sample), file("${sample}.interpretation.json")
 
     script: 
     """
     export OPENAI_KEY="\$OPENAI_KEY"
-    interpret.py $sample ${variants.join(',')} $clincial_data
+    interpret.py $sample ${variants.join(',')} $clincial_data $model_config
     """
 }
 
 
 process CREATE_REPORT {
     input:
-    tuple val(sample), file(variants)
-    path interpretation
+    tuple val(sample), file(variants), file(interpretation)
     path clinical_data
     path sex_chromosomes
 

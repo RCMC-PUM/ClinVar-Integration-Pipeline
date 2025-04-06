@@ -12,8 +12,9 @@ params.sample_sheet = ''  // Path to the sample sheet
 params.output_dir = '' // Path to output directory 
 
 // Filters
-params.clinical_significance = 'Pathogenic,Likely_pathogenic,Pathogenic/Likely_pathogenic,Pathogenic|risk_factor'  // User-defined pathogenicity filter
-params.clinical_review_status = '_multiple_submitters,criteria_provided,reviewed_by_expert_panel'  // User-defined review status filter
+// params.clinical_significance = 'Pathogenic,Likely_pathogenic,Pathogenic/Likely_pathogenic,Pathogenic|risk_factor,drug_response'  // User-defined pathogenicity filter
+params.clinical_significance = 'drug_response'  // User-defined pathogenicity filter
+params.clinical_review_status = '_multiple_submitters,reviewed_by_expert_panel'  // User-defined review status filter
 
 // Annotations
 params.genome_assembly = 'hg38' // Either hg19 or hg38
@@ -86,7 +87,9 @@ workflow {
 
     // Interpret variants
     if (params.clinical_data && params.assistant && secrets.OPENAI_KEY){
-        variants_iterpretation = INTERPRET(variants, clinical_data)
+        model_configuration_file = file(params.model_config, checkIfExists:true)
+        variants_iterpretation = INTERPRET(variants, clinical_data, model_configuration_file)
+        variants = variants.join(variants_iterpretation)
     }
     else {
         variants_iterpretation = PLACEHOLDER_2("variants_iterpretation")
@@ -101,5 +104,5 @@ workflow {
     html_template = file(params.template, checkIfExists:true)
     glossary = file(params.glossary, checkIfExists:true)
 
-    CREATE_REPORT(variants, variants_iterpretation, clinical_data, sex, workflow_params, annotations_metadata, html_template, glossary)
+    CREATE_REPORT(variants, clinical_data, sex, workflow_params, annotations_metadata, html_template, glossary)
 }

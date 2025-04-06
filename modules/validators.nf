@@ -13,7 +13,7 @@ process VALIDATE_SAMPLE_SHEET {
     
     callers = ss["Caller"].unique()
 
-    assert set(callers) == set(supported_callers), f"Supported callers types are: {supported_callers}!"
+    assert set(callers).issubset(set(supported_callers)), f"Supported callers types are: {supported_callers}!"
     assert set(expected_cols) == set(ss.columns), f"Sample sheet should contain three columns: {expected_cols}!"
     """
 }
@@ -31,6 +31,7 @@ process VALIDATE_CLINICAL_DATA {
     expected_cols = ["Sample_Name","Clinical_Description"]
 
     assert set(expected_cols) == set(ss.columns), f"Clinical data file should contain three columns: {expected_cols}!"
+    assert ss.Sample_Name.nunique() == ss.shape[0], f"Clinical data should contain only unique samples."
     """
 }
 
