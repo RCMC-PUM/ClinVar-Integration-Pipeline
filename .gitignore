@@ -11,7 +11,7 @@ notebooks/
 
 # Test
 test/
-tests-2/
+tests*/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
