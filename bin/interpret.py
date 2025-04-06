@@ -21,6 +21,8 @@ def load_clinical_data(
     clinical_data_col: str = "Clinical_Description",
 ) -> str:
     df = pd.read_csv(path).set_index(sample_name_col)
+    df["Clinical_Description"] = df["Clinical_Description"].fillna("NOT PROVIDED/NOT AVAILABLE.")
+    
     return df.loc[sample, clinical_data_col]
 
 
@@ -65,35 +67,33 @@ def load_variants(files: list[str]) -> dict:
             != "No associated MedGen concepts found"
         )
     ]
+
     return filtered
 
 
 def main():
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 5:
         print(
-            "Usage: interpret.py <sample_name: str> <input_variants_files: str,str,str[...]> <clinical_data: str>"
+            "Usage: interpret.py <sample_name: str> <input_variants_files: str,str,str[...]> <clinical_data: str> <model_config: str>"
         )
         sys.exit(1)
 
     OPENAI_KEY = os.environ["OPENAI_KEY"]
 
-    sample, variants_files, clinical_data = sys.argv[1:]
+    sample, variants_files, clinical_data, model_config_file = sys.argv[1:]
     variants_files = [file.strip() for file in variants_files.split(",")]
 
     variants = load_variants(variants_files)
     clinical_data = load_clinical_data(clinical_data, sample)
-
+    model_config = load_json(model_config_file)
+    
     try:
         client = OpenAI(api_key=OPENAI_KEY)
-        instruction = """
-        You are an assistant for clinical genetics specialist, be precise and concise. Return output as a RAW text (do not use * or any type of tags). Make a conclusion, focuse on the genotype, clinical features and inheritance model. Indicate ID of variants candidates."
-        """
 
-        # Send the prompt to OpenAI GPT
         response = client.responses.create(
-            model="gpt-4o-mini",
-            instructions=instruction,
-            input=f"Based on the following clinical data (clinical outcome) {clinical_data} and the identified genetic variants {variants}, attempt to identify the variant(s) that may be causing (or associated with) the provided clinical outcome.",
+            model=model_config["model"],
+            instructions=model_config["instruction"],
+            input=f"Clinical features: {clinical_data}. Genetic variants: {variants}.",
         )
 
         # Interpretation result
@@ -108,7 +108,7 @@ def main():
             "interpretation": e,
         }
 
-    with open("interpretation.json", "w", encoding="utf-8") as file:
+    with open(f"{sample}.interpretation.json", "w", encoding="utf-8") as file:
         json.dump(output, file, indent=2)
 
 

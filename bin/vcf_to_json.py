@@ -84,7 +84,7 @@ def parse_vcf(
         return parsed
 
     if n_variants == 0:
-        parsed["STATUS"] = {"STATUS": "No variants detected, skipping."}
+        parsed["STATUS"] = {"STATUS": "No variants detected."}
         parsed["SOURCE"] = {"sample": sample, "file": input_vcf, "caller": caller}
         return parsed
 
