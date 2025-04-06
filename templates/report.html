@@ -119,12 +119,14 @@
     <div class="card mb-4 card-hover" id="assistant">
         <div class="card-body">
             <h5 class="card-title">Variant interpretation assistant</h5>
-            <p class="text-muted mt-3" style="font-size: 0.9rem;">
-                <strong>Disclaimer:</strong> This response is generated using AI and is for informational purposes only. It is not intended for diagnosis, treatment, or any medical use. Always consult a qualified healthcare professional for medical advice.
-            </p>
-            <hr>
             <div style="text-align: justify; text-justify: inter-word">
-                {{ assistant.interpretation }}
+                <p class="text-muted mt-3" style="font-size: 0.9rem;">
+                    <strong>Disclaimer:</strong> This response is generated using AI and is for informational purposes only. It is not intended for diagnosis, treatment, or any medical use. Always consult a qualified healthcare professional for medical advice.
+                </p>
+            </div>
+            <hr>
+            <div>
+                {{ assistant.interpretation | safe}}
             </div>
         </div>
     </div>
@@ -180,7 +182,7 @@
                             {% endfor %}
                         </div>
                     {% else %}
-                        <div class="alert alert-warning">No variants detected, skipping.</div>
+                        <div class="alert alert-warning">No variants detected.</div>
                     {% endif %}
                 </div>
             </div>
