@@ -1,4 +1,4 @@
-all: dos2unix black isort pylint
+all: dos2unix black isort pylint dlint
 
 black:
 	@echo "Code formatting"
@@ -15,3 +15,7 @@ pylint:
 dos2unix:
 	@echo "Reformatting"
 	dos2unix bin/*.py
+
+dlint:
+	@echo "Lint Dockerfile"
+	docker run --rm -i hadolint/hadolint < Dockerfile

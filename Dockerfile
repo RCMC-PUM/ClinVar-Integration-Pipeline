@@ -20,12 +20,12 @@ RUN ln -sf /usr/bin/python3.12 /usr/bin/python
 WORKDIR /app
 
 # Copy
-COPY bin poetry.lock pyproject.toml .
+COPY bin poetry.lock pyproject.toml ./
 
 # Install dependencies
-RUN python -m pip install --break-system-package --no-cache-dir poetry poetry-plugin-export
-RUN python -m poetry export --without-hashes --format=requirements.txt -o requirements.txt
-RUN python -m pip install --break-system-package -r requirements.txt
+RUN python -m pip install --break-system-package --no-cache-dir poetry poetry-plugin-export && \
+    python -m poetry export --without-hashes --format=requirements.txt -o requirements.txt && \
+    python -m pip install --no-cache-dir --break-system-package -r requirements.txt
 
 # Change mode of bin files
 COPY bin/*.py bin/*.py
