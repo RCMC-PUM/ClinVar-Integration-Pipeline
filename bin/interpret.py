@@ -21,8 +21,10 @@ def load_clinical_data(
     clinical_data_col: str = "Clinical_Description",
 ) -> str:
     df = pd.read_csv(path).set_index(sample_name_col)
-    df["Clinical_Description"] = df["Clinical_Description"].fillna("NOT PROVIDED/NOT AVAILABLE.")
-    
+    df["Clinical_Description"] = df["Clinical_Description"].fillna(
+        "NOT PROVIDED/NOT AVAILABLE."
+    )
+
     return df.loc[sample, clinical_data_col]
 
 
@@ -86,7 +88,7 @@ def main():
     variants = load_variants(variants_files)
     clinical_data = load_clinical_data(clinical_data, sample)
     model_config = load_json(model_config_file)
-    
+
     try:
         client = OpenAI(api_key=OPENAI_KEY)
 

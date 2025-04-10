@@ -16,7 +16,7 @@ def load_clinical_data(
 ) -> str:
     df = pd.read_csv(path).set_index(sample_name_col)
     df[clinical_data_col] = df[clinical_data_col].fillna("NOT PROVIDED.")
-    
+
     return df.loc[sample, clinical_data_col]
 
 
